@@ -1,14 +1,12 @@
-var express = require('express');
-var app = express();
+const express = require('express');
+const favicon = require('serve-favicon')
+const path = require('path');
+const PORT = process.env.PORT || 80;
 
-app.set('port', (process.env.PORT || 80));
-app.use(express.static(__dirname + '/static'));
-app.use(express.static(__dirname + '/pages'));
-
-app.get('/', function(request, response) {
-  response.render('pages/index');
-});
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running at localhost:" + app.get('port'));
-});
+express()
+  .use(express.static(path.join(__dirname, 'pages')))
+  .set('views', path.join(__dirname, 'views'))
+  .use(favicon(path.join(__dirname, 'views', 'favicon.ico')))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
