@@ -6,11 +6,14 @@
   "name": "quant-jj-vaa",
   "version": "1.0.0",
   "description": "for quantitative investment",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
-    "test": "node app.js",
-    "start": "node app.js"
+    "test": "node index.js",
+    "start": "node index.js"
   },
   "author": "jaejoon.han",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
