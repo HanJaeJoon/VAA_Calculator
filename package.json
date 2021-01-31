@@ -12,5 +12,5 @@
     "start": "node app.js"
   },
   "author": "jaejoon.han",
-  "license": "ISC"
+  "license": "MIT"
 }

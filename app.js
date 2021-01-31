@@ -7,6 +7,7 @@ const port = process.env.PORT || 80;
 const server = http.createServer((req, res) => {
     let url = req.url;
 
+    console.log(url);
     if (url === '/') {
         url = '/index.html';
     }
