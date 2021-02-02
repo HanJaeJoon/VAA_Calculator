@@ -2,7 +2,7 @@ const express = require('express');
 const favicon = require('serve-favicon')
 const stockInfo = require(__dirname + '/static/js/stockInfo.js');
 const path = require('path');
-const { Console } = require('console');
+
 const PORT = process.env.PORT || 80;
 
 var app = express();
@@ -34,10 +34,10 @@ app.get('/api/:date', (req, res) => {
 
 app.get('/api/calculate/:date', asyncCalculate);
 
-async function asyncCalculate(req, res) {
+async function asyncCalculate(req, res, next) {
   try {
-    let result = await stockInfo.calculate(req.params.date);
-    res.send(result);
+    let result = await stockInfo.asyncCalculate(req.params.date);
+    res.json(result);
   } catch (e) {
     res.status(500).send(`Internal Server Error`);
   }

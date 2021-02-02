@@ -68,7 +68,7 @@
 
             let format = date.toISOString().split('T')[0];
 
-            fetch(`https://quant-jj-vaa.herokuapp.com/api/calculate/${format}`)
+            fetch(`./api/calculate/${format}`)
                 .then(response => response.json())
                 .then(data => {
                     let result = data.quote;
