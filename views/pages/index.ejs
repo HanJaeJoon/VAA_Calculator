@@ -62,12 +62,13 @@
             $('#btnCheck')
                 .html(`
                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                    Loading...`)
+                    Loading...
+                `)
                 .prop('disabled', true);
 
             let format = date.toISOString().split('T')[0];
 
-            fetch(`./api/calculate/${format}`)
+            fetch(`https://quant-jj-vaa.herokuapp.com/api/calculate/${format}`)
                 .then(response => response.json())
                 .then(data => {
                     let result = data.quote;
