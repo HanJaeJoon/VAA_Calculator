@@ -2,6 +2,7 @@ const express = require('express');
 const favicon = require('serve-favicon')
 const stockInfo = require(__dirname + '/static/js/stockInfo.js');
 const path = require('path');
+const { Console } = require('console');
 const PORT = process.env.PORT || 80;
 
 var app = express();
@@ -19,14 +20,25 @@ app
 app.get('/api/:date', (req, res) => {
   try {
     stockInfo.getData(req.params.date)
-      .then((err, quotes) => {
-        if (err) {
-          res.status(500).send(`Internal Server Error - ${JSON.stringify(err)}`);
-        } else {
+      .then((quotes) => {
+        if (quotes) {
           res.send(quotes);
+        } else {
+          res.status(500).send(`Internal Server Error`);
         }
       });
   } catch (e) {
     res.status(500).send(`Internal Server Error - ${JSON.stringify(e)}`);
   }
 });
+
+app.get('/api/calculate/:date', asyncCalculate);
+
+async function asyncCalculate(req, res) {
+  try {
+    let result = await stockInfo.calculate(req.params.date);
+    res.send(result);
+  } catch (e) {
+    res.status(500).send(`Internal Server Error`);
+  }
+}

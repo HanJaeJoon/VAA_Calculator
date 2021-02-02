@@ -1,4 +1,5 @@
 const yahooFinance = require('yahoo-finance');
+const moment = require('moment');
 
 class StockInfo {
     getData(targetDate) {
@@ -24,6 +25,20 @@ class StockInfo {
             to: toDate,
             period: 'd'
         });
+    }
+
+    async asyncCalculate(targetDate) {
+        var today = moment().startOf('day');
+
+        if (moment(targetDate,'YYYY-MM-DD').isAfter(today, 'day')) {
+            throw Error('미래 검색 불가능!');
+        }
+
+        let result = await this.getData(targetDate);
+
+        // algorithm
+
+        return { quote: 'SHY' };
     }
 }
 

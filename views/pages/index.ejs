@@ -7,29 +7,88 @@
 
 <body>
     <div class="container text-center p-4">
-        <h3>참고 영상입니다.</h3>
+        <h3>참고 영상</h3>
         <div>
-            <iframe width="560" height="315" 
-                src="https://www.youtube.com/embed/eQeu8v_-Y98" frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/eQeu8v_-Y98" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
             </iframe>
-        </div> 
-        <h3>기준 날짜를 선택해주세요.</h3>
-        <div class="input-group">
-            <input type="text" class="form-control datepicker">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button">확인</button>
-            </div>
         </div>
-        <div class="d-none">
-            <h3>이번 달의 매수 종목은 <b>SHY</b> 입니다.</h3>
+        <h3>매수 종목을 확인할 날짜를 선택해주세요.</h3>
+            <div class="input-group w-50 m-auto">
+                <input id="datePicker" type="text" class="form-control datepicker" data-date-end-date="0d">
+                <div class="input-group-append">
+                    <button id="btnCheck" class="btn btn-primary" type="button">확인하기</button>
+                </div>
+            </div>
+        <div id="divResult" class="d-none mt-5">
+            <h3><span id="spanDate"></span> 기준 매수 종목은 <b id="quote">SHY</b> 입니다.</h3>
         </div>
     </div>
 </body>
 <script>
-    $(document).ready(function () {
+    $(document).ready(() => {
         $('.datepicker').datepicker({
             language: 'ko',
+            todayBtn: 'linked',
+            clearBtn: true,
+            orientation: 'bottom',
+            title: '기준 날짜 선택'
+        });
+
+        $('#datePicker').keydown((e) => {
+            let keyCode = e.keyCode || e.which;
+
+            if (keyCode === 13) {
+                $('#btnCheck').click();
+            }
+        });
+
+        $('#btnCheck').click(() => {
+            let date;
+            let $datePicker = $('#datePicker');
+
+            if (!$datePicker.val()) {
+                if (confirm('날짜를 선택하지 않았습니다.\n오늘 날짜로 검색할까요?')) {
+                    date = new Date();
+                } else {
+                    return;
+                }
+            } else {
+                let utcDate = $datePicker.data('datepicker').getUTCDate();
+                date = new Date(utcDate);
+            }
+
+            $('#btnCheck')
+                .html(`
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    Loading...`)
+                .prop('disabled', true);
+
+            let format = date.toISOString().split('T')[0];
+
+            fetch(`./api/calculate/${format}`)
+                .then(response => response.json())
+                .then(data => {
+                    let result = data.quote;
+
+                    if (result) {
+                        $('#spanDate').text(format);
+                        $('#quote').text(result);
+                        $('#divResult').removeClass('d-none');
+                    } else {
+                        alert('에러 발생 ^^');
+                    }
+                })
+                .catch(() => {
+                    alert('에러 발생 ^^');
+                    $('#divResult').addClass('d-none');
+                })
+                .then(() => {
+                    $('#btnCheck')
+                        .prop('disabled', false)
+                        .html('확인하기');
+                });
         });
     });
 </script>
