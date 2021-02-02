@@ -2,6 +2,7 @@ const express = require('express');
 const favicon = require('serve-favicon')
 const stockInfo = require(__dirname + '/static/js/stockInfo.js');
 const path = require('path');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 80;
 
@@ -32,7 +33,9 @@ app.get('/api/:date', (req, res) => {
   }
 });
 
-app.get('/api/calculate/:date', asyncCalculate);
+app
+  .options('/api/calculate/:date', cors())
+  .get('/api/calculate/:date', cors(), asyncCalculate);
 
 async function asyncCalculate(req, res, next) {
   try {
