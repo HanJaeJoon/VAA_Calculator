@@ -42,6 +42,6 @@ async function asyncCalculate(req, res, next) {
     let result = await stockInfo.asyncCalculate(req.params.date);
     res.send(result);
   } catch (e) {
-    res.status(500).send(`Internal Server Error`);
+    res.status(500).send(`Internal Server Error - ${JSON.stringify(e)}`);
   }
 }
