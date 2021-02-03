@@ -12,7 +12,7 @@ app
   .use(express.static(path.join(__dirname, 'pages')))
   .set('views', path.join(__dirname, 'views'))
   .use(favicon(path.join(__dirname, 'views', 'favicon.ico')))
-  .use(express.static(path.join(__dirname, 'static/public')))
+  .use(express.static(path.join(__dirname, 'static/images')))
   .set('view engine', 'ejs')
   .get('/', (req, res) => res.render('pages/index'))
   .listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -40,7 +40,7 @@ app
 async function asyncCalculate(req, res, next) {
   try {
     let result = await stockInfo.asyncCalculate(req.params.date);
-    res.send(result);
+    res.json(result);
   } catch (e) {
     res.status(500).send(`Internal Server Error - ${JSON.stringify(e)}`);
   }

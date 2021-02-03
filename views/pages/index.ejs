@@ -7,22 +7,51 @@
 
 <body>
     <div class="container text-center p-4">
-        <h3>참고 영상</h3>
-        <div>
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/eQeu8v_-Y98" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
+        <h2>Vigilant Asset Allocation</h2>
+        <hr />
         <h3>매수 종목을 확인할 날짜를 선택해주세요.</h3>
-            <div class="input-group w-50 m-auto">
-                <input id="datePicker" type="text" class="form-control datepicker" data-date-end-date="0d">
-                <div class="input-group-append">
-                    <button id="btnCheck" class="btn btn-primary" type="button">확인하기</button>
-                </div>
+        <div class="input-group w-50 m-auto">
+            <input id="datePicker" type="text" class="form-control datepicker" data-date-end-date="0d">
+            <div class="input-group-append">
+                <button id="btnCheck" class="btn btn-primary" type="button">확인하기</button>
             </div>
-        <div id="divResult" class="d-none mt-5">
+        </div>
+        <div id="divResult" class="d-none my-4">
             <h3><span id="spanDate"></span> 기준 매수 종목은 <b id="quote">SHY</b> 입니다.</h3>
+            <hr />
+            <div class="my-2">
+                <div class="text-right ml-auto">
+                    😺괄호는 가중치가 적용된 모멘텀입니다.
+                </div>
+                <table id="detailTable" class="table my-1">
+                    <thead>
+                      <tr>
+                        <th scope="col">종목</th>
+                        <th scope="col">12개월 전</th>
+                        <th scope="col">6개월 전</th>
+                        <th scope="col">3개월 전</th>
+                        <th scope="col">1개월 전</th>
+                        <th scope="col">검색 날짜</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <hr />
+        <div class="d-flex justify-content-start pt-2">
+            <div class="w-50">
+                <img width="530" height="440" src="/Keller.jpg">
+                <h3>VAA의 아버지</h3>
+            </div>
+            <div class="w-50">
+                <iframe width="530" height="440" src="https://www.youtube.com/embed/eQeu8v_-Y98" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+                <h3>VAA의 어머니</h3>
+            </div>
         </div>
     </div>
 </body>
@@ -73,6 +102,8 @@
                 .then(data => {
                     let result = data.quote;
 
+                    drawHistroy(data);
+
                     if (result) {
                         $('#spanDate').text(format);
                         $('#quote').text(result);
@@ -91,6 +122,58 @@
                         .html('확인하기');
                 });
         });
+
+        let drawHistroy = (data) => {
+            let history = data.history;
+            let $tbody = $('#detailTable tbody');
+            
+            $tbody.html('');
+
+            let trHTML = '';
+
+            for (let ticker in history) {
+                let stockInfo = history[ticker];
+                let p12 = stockInfo['p12'].price;
+                let p6 = stockInfo['p6'].price;
+                let p3 = stockInfo['p3'].price;
+                let p1 = stockInfo['p1'].price;
+                let p0 = stockInfo['p0'].price;
+
+                let m12 = 12 * (p0 / p1 - 1);
+                let m6 = 4 * (p0 / p3 - 1);
+                let m3 = 2 * (p0 / p6 - 1);
+                let m1 = 1 * (p0 / p12 - 1);
+
+                let total = m12 + m6 + m3 + m1;
+
+                trHTML += `
+                    <tr class="${ticker === data.quote ? 'table-active' : ''}">
+                        <th scope="row"><font style="font-size: 24px;">${ticker}</font></th>
+                        <td style="color: ${getColor(m12)};">
+                            ${p12.toFixed(2)}<br />(${m12.toFixed(3)})
+                        </td>
+                        <td style="color: ${getColor(m6)};">
+                            ${p6.toFixed(2)}<br />(${m6.toFixed(3)})
+                        </td>
+                        <td style="color: ${getColor(m3)};">
+                            ${p3.toFixed(2)}<br />(${m3.toFixed(3)})
+                        </td>
+                        <td style="color: ${getColor(m1)};">
+                            ${p1.toFixed(2)}<br />(${m1.toFixed(3)})
+                        </td>
+                        <td style="color: ${getColor(total)};">
+                            ${p0.toFixed(2)}<br />(${total.toFixed(3)})
+                        </td>
+                    </tr>
+                `;
+            }
+
+            $tbody.html(trHTML);
+        }
+
+        let getColor = (a) => {
+            return +a > 0 ? 'red' : 'blue';   
+        }
     });
 </script>
 
