@@ -17,26 +17,28 @@
             </div>
         </div>
         <div id="divResult" class="d-none my-4">
-            <h3><span id="spanDate"></span> 기준 매수 종목은 <b id="quote">SHY</b> 입니다.</h3>
+            <h3><span id="spanDate"></span> 종가 기준 매수 종목은 <b id="quote">SHY</b> 입니다.</h3>
             <hr />
             <div class="my-2">
                 <div class="text-right ml-auto">
                     😺괄호는 가중치가 적용된 모멘텀입니다.
                 </div>
-                <table id="detailTable" class="table my-1 w-100">
-                    <thead>
-                      <tr>
-                        <th scope="col">종목</th>
-                        <th scope="col">12개월 전</th>
-                        <th scope="col">6개월 전</th>
-                        <th scope="col">3개월 전</th>
-                        <th scope="col">1개월 전</th>
-                        <th scope="col">검색 날짜</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                  </table>
+                <div class="table-responsive">
+                    <table id="detailTable" class="table my-1 w-100">
+                        <thead>
+                            <tr>
+                                <th scope="col">종목</th>
+                                <th scope="col">12개월 전</th>
+                                <th scope="col">6개월 전</th>
+                                <th scope="col">3개월 전</th>
+                                <th scope="col">1개월 전</th>
+                                <th scope="col">검색 날짜</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <hr />
@@ -78,8 +80,9 @@
             let $datePicker = $('#datePicker');
 
             if (!$datePicker.val()) {
-                if (confirm('날짜를 선택하지 않았습니다.\n오늘 날짜로 검색할까요?')) {
-                    date = new Date();
+                if (confirm('날짜를 선택하지 않았습니다.\n어제 날짜로 검색할까요?')) {
+                    date = new Date()
+                    date.setDate(date.getDate() - 1);
                 } else {
                     return;
                 }
@@ -126,7 +129,7 @@
         let drawHistroy = (data) => {
             let history = data.history;
             let $tbody = $('#detailTable tbody');
-            
+
             $tbody.html('');
 
             let trHTML = '';
@@ -172,7 +175,7 @@
         }
 
         let getColor = (a) => {
-            return +a > 0 ? 'red' : 'blue';   
+            return +a > 0 ? 'red' : 'blue';
         }
     });
 </script>
