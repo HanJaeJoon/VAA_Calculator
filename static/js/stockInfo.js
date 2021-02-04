@@ -29,10 +29,10 @@ class StockInfo {
     }
 
     async asyncCalculate(targetDate) {
-        var today = moment().startOf('day');
+        let today = moment().startOf('day');
 
-        if (moment(targetDate, 'YYYY-MM-DD').isAfter(today, 'day')) {
-            throw Error('미래 검색 불가능!');
+        if (moment(targetDate, 'YYYY-MM-DD').isSameOrAfter(today, 'day')) {
+            throw Error('과거 검색만 가능!');
         }
 
         let stockInfo = await this.getData(targetDate);

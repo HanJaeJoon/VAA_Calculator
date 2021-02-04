@@ -23,8 +23,8 @@
                 <div class="text-right ml-auto">
                     😺괄호는 가중치가 적용된 모멘텀입니다.
                 </div>
-                <div class="table-responsive">
-                    <table id="detailTable" class="table my-1 w-100">
+                <div class="table-responsive-md w-100">
+                    <table id="detailTable" class="table table-sm my-1 w-100">
                         <thead>
                             <tr>
                                 <th scope="col">종목</th>
@@ -101,7 +101,13 @@
             let format = date.toISOString().split('T')[0];
 
             fetch(`./api/calculate/${format}`)
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    } else {
+                        return response.json();
+                    }
+                })
                 .then(data => {
                     let result = data.quote;
 
@@ -115,8 +121,8 @@
                         alert('에러 발생 ^^');
                     }
                 })
-                .catch(() => {
-                    alert('에러 발생 ^^');
+                .catch((e) => {
+                    alert(`에러 발생 ^^\n${e.message}`);
                     $('#divResult').addClass('d-none');
                 })
                 .then(() => {
@@ -150,8 +156,8 @@
                 let total = m12 + m6 + m3 + m1;
 
                 trHTML += `
-                    <tr class="${ticker === data.quote ? 'table-active' : ''}">
-                        <th scope="row"><font style="font-size: 24px;">${ticker}</font></th>
+                    <tr class="${ticker === data.quote ? 'table-success' : ''}">
+                        <th scope="row"><font style="font-size: 20px;">${ticker}</font></th>
                         <td style="color: ${getColor(m12)};">
                             ${p12.toFixed(2)}<br />(${m12.toFixed(3)})
                         </td>
