@@ -4,7 +4,7 @@ const stockInfo = require(__dirname + '/static/js/stockInfo.js');
 const path = require('path');
 const cors = require('cors');
 
-const PORT = process.env.PORT || 80;
+const PORT = process.env.PORT || 70;
 
 var app = express();
 
