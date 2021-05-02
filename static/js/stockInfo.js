@@ -118,7 +118,6 @@ class StockInfo {
         }
 
         // calculate momentum
-        let bestMomentum = -999999;
         let momentums = {};
 
         for (let ticker in result.history) {
@@ -133,10 +132,6 @@ class StockInfo {
             let momentum = 12 * (p0 / p1 - 1) + 4 * (p0 / p3 - 1) + 2 * (p0 / p6 - 1) + (p0 / p12 - 1);
 
             momentums[ticker] = momentum;
-
-            if (bestMomentum < momentum) {
-                bestMomentum = momentum;
-            }
         }
 
         // select quote
@@ -148,6 +143,7 @@ class StockInfo {
             for (let t in momentums) {
                 if (max === momentums[t]) {
                     quote = t;
+                    // console.log(`${quote} is selected`);
                     break; 
                 }
             }
@@ -157,13 +153,14 @@ class StockInfo {
             for (let t in momentums) {
                 if (max === momentums[t]) {
                     quote = t;
+                    // console.log(`${quote} is selected`);
                     break; 
                 }
             }
         }
 
         result.quote = quote;
-
+        
         return result;
     }
 }
