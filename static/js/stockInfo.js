@@ -134,6 +134,8 @@ class StockInfo {
             momentums[ticker] = momentum;
         }
 
+        //console.log(`${quote} is selected`);
+
         // select quote
         let quote;
 
@@ -143,7 +145,7 @@ class StockInfo {
             for (let t in momentums) {
                 if (max === momentums[t]) {
                     quote = t;
-                    // console.log(`${quote} is selected`);
+                    //console.log(`${quote} is selected`);
                     break; 
                 }
             }
@@ -153,7 +155,7 @@ class StockInfo {
             for (let t in momentums) {
                 if (max === momentums[t]) {
                     quote = t;
-                    // console.log(`${quote} is selected`);
+                    //console.log(`${quote} is selected`);
                     break; 
                 }
             }
